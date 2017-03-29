@@ -1,0 +1,77 @@
+//------------grid for 16 column------------
+$total: 16;
+
+@function column-width($col) {  
+ @return percentage($col/$total);  
+}
+
+@for $i from 1 through $total {  
+.col-#{$i} { width: column-width($i) };  
+}
+
+//-----------add psevdo elements to link-------------------
+$white:white;
+$blue:blue;
+$green:green;
+$red:red;
+@mixin link ($link, $visit, $hover, $active) {
+  a {
+    color: $link;
+    &:visited {
+      color: $visit;
+    }
+    &:hover {
+      color: $hover;   
+    }
+    &:active {
+      color: $active;
+    }
+  }
+}
+
+@include link($white, $blue, $green, $red);
+
+//---------------CREATE TRIANGLE-------------------
+
+@mixin create_triangle($dir, $size, $color) {
+
+	width: 0; 
+	height: 0; 
+
+	@if $dir == up {		
+	border-left: $size solid transparent;
+	border-right: $size solid transparent;
+	border-bottom: $size solid $color;
+			
+    } @else if $dir == down {
+	border-left: $size solid transparent;
+	border-right: $size solid transparent;
+	border-top: $size solid $color;
+    }
+
+}
+.main{
+    @include create_triangle(up,80px,red)
+}
+//------------------use media query------------------
+$information-phone: "only screen and (max-width : 320px)";
+
+@media #{$information-phone} {
+    .main{
+        background: red;}
+}
+
+//---------------------error --------------
+$colors: (
+  brand-red: #c0392b,
+  brand-blue: #2980b9,
+  text-gray: #2c3e50,
+  text-silver: #bdc3c7
+);
+@function color-variation($color) {
+  @if map-has-key($colors, $color) {
+    @return map-get($colors, $color);
+  }
+  
+  @error "Invalid color name: `#{$color}`.";
+}
